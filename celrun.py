@@ -2,17 +2,21 @@
 #!/usr/bin/python
 import beggar
 import worker
+from celery.result import ResultSet
 
-start = 142153421643
-trials = 10
+start = 343685886
+trials = 250
+
 d = beggar.GameNo(start=start)
+rs = ResultSet([])
 
 while(trials > 0):
 	trials -= 1
 	gameno = d.next()
-	worker.Search.delay(gameno)
+	rs.add(worker.Search.delay(gameno))
 	#print "{}".format(Search(gameno))
 
+print max(rs.join())
 
 #try:
 #    from numpy import histogram
