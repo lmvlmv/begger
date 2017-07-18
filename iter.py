@@ -24,7 +24,6 @@ while(trials > 0):
 			cont = False
 
 
-def 
 
 #try:
 #    from numpy import histogram
