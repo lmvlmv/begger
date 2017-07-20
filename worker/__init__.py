@@ -2,10 +2,12 @@
 import beggar
 import time
 import sys
+import os
 
 from celery import Celery
 
-app = Celery('iter', backend='rpc://', broker='pyamqp://guest@localhost//')
+broker = os.environ['BROKER_URI']
+app = Celery('worker', backend='rpc://', broker=broker )
 
 @app.task
 def add(x, y):

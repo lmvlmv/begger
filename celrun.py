@@ -5,7 +5,7 @@ import worker
 from celery.result import ResultSet
 
 start = 343685886
-trials = 250
+trials = 4
 
 d = beggar.GameNo(start=start)
 rs = ResultSet([])
