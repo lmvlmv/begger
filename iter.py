@@ -10,6 +10,7 @@ max = 0
 d = beggar.GameNo(start=start)
 
 while(trials > 0):
+    print "Trial: {}".format(trials)
     trials -= 1
     turns = 0
     cont = True
@@ -24,7 +25,6 @@ while(trials > 0):
 			cont = False
 
 
-def 
 
 #try:
 #    from numpy import histogram
