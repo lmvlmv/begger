@@ -1,5 +1,5 @@
 #!/usr/bin/python
-from sympy.utilities.iterables import multiset_permutations
+#from sympy.utilities.iterables import multiset_permutations
 
 class deal(object):
     def __init__(self, start = -1, max = 2251250057871360):
