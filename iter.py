@@ -1,23 +1,23 @@
-0#!/usr/bin/python
-import beggar
+#!/usr/bin/python
+from  beggar import Beggar, Deal, GameNo
 import time
 import sys
+from tqdm import tqdm
 
 def play(game):
     turns = 0
-    cont = True
-    print ".",
-    deal = beggar.Deal(game)
-    stats = [] 
-    while(cont):
-        try:
-            (left, right) = deal.next()
-            (turns, tricks, starts) = beggar.play((left,right),verbose=False) 
-            stats.append(turns)
-            #print "Turns: {} Tricks: {} Starts {}".format(turns, tricks, starts)
-        except StopIteration:
-            cont = False
-    return (game, max(stats))  
+    deal = Deal(game)
+    longest = 0 
+
+    pbar = tqdm(total=63063000, unit='Games', ncols=140, bar_format='{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}] {rate_fmt} {postfix[0]} {postfix[1][maxturns]}', postfix=["Max Turns:", dict(maxturns=0)])
+    for (left,right) in deal:
+        (turns, tricks, starts) = Beggar.play((left,right),verbose=False) 
+        if turns >  longest:
+            longest = turns
+            pbar.postfix[1]['maxturns'] = longest
+        pbar.update()
+        next(deal)
+        #print "Turns: {} Tricks: {} Starts {}".format(turns, tricks, starts)
 
 
 def report(res):
@@ -25,17 +25,17 @@ def report(res):
         print "Game {}, max {}".format(r[0], r[1])
 
 start = 4433230883192895
-trials = 100
-d = beggar.GameNo(start=start)
+trials = 10
+d = GameNo(start=start)
 games = [ d.next() for i in range(trials) ]
-# for game in games:
-#     play(game)
-if __name__ == '__main__':  
-    from multiprocessing import Pool
-    p = Pool(4)
-    p.map_async(play, games, callback=report)
-    p.close()
-    p.join()
+for game in games:
+    play(game)
+# if __name__ == '__main__':  
+#     from multiprocessing import Pool
+#     p = Pool(4)
+#     p.map_async(play, games, callback=report)
+#     p.close()
+#     p.join()
 
 
 
