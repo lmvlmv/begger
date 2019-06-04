@@ -61,6 +61,7 @@ class Beggar(object):
         
             if len(a) == len(b):
                 starts += 1	
+                print "{}/{}".format(a,b)
     
             player = player*-1
             
@@ -70,7 +71,35 @@ class Beggar(object):
         return (turns, tricks, starts)
 
 
+class BeggarGame(object):
+    
+    def __init__(self):
+        pass
+    
+    @staticmethod
+    def validate(l,r):
+        if (len(l) != 26) or len(r) != 26:
+            print "Wrong hand sizes {} {}".format(len(l),len(r))
+            raise ValueError
 
+        for court in 'AKQJ':
+            if (l+r).count(court) != 4:
+                print "Wrong number of {}: {}".format(c,(l+r).count(court))
+                raise ValueError
+
+    @staticmethod
+    def gamenumber(l,r):
+        bin = ''
+        for c in (l+r):
+            if c in 'AKQJ':
+                bin += '1'
+            else:
+                bin += '0'
+
+        return int(bin,2)
+
+        
+        
 
 class GameNo(object):
     def __init__(self, start = -1, maxgame = 4503530907893760):
@@ -99,7 +128,7 @@ class Deal(object):
         from sympy.utilities.iterables import multiset_permutations
         self._gameno = gameno 	
         # self._perm = Combos()()
-        self._perm = multiset_permutations(['J','Q','K','A','J','Q','K','A','J','Q','K','A','J','Q','K', 'A'])
+        self._perm = multiset_permutations(['J','J','J','J','Q','Q','Q','Q','K','K','K','K','A','A','A', 'A'])
         
     def __iter__(self):	
         return self
@@ -113,7 +142,10 @@ class Deal(object):
                     deck += "-"
                 else:
                     deck += court.pop()
-            #sys.stdout.write("{}/{}\r".format(deck[:25],deck[26:]))
-            return (deck[0:25],deck[26:51])
+            try:
+                BeggarGame.validate(deck[:26],deck[26:])
+            except:
+                sys.exit(1)
+            return (deck[:26],deck[26:])
         raise StopIteration() 
 
