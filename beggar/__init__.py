@@ -61,8 +61,7 @@ class Beggar(object):
         
             if len(a) == len(b):
                 starts += 1	
-                print "{}/{}".format(a,b)
-    
+
             player = player*-1
             
             #print current status
@@ -84,7 +83,7 @@ class BeggarGame(object):
 
         for court in 'AKQJ':
             if (l+r).count(court) != 4:
-                print "Wrong number of {}: {}".format(c,(l+r).count(court))
+                print "Wrong number of {}: {}".format(court,(l+r).count(court))
                 raise ValueError
 
     @staticmethod
@@ -134,8 +133,11 @@ class Deal(object):
         return self
 
     def next(self):
-        while(self._perm):
-            court = self._perm.next()
+        while(True):
+            try:
+                court = self._perm.next()   
+            except StopIteration:
+                raise
             deck = ""
             for b in format(self._gameno, '048b'):
                 if b == "0":
