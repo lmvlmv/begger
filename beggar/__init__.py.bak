@@ -1,80 +1,80 @@
 import sys
 
-
 class Beggar(object):
 
     @staticmethod
-    def play(hands, firstCardOnLeft=True, verbose=False):
-
+    def play(hands,firstCardOnLeft=True,verbose=False):
+        
         def penalty_value_of(card):
-            values = {"J": 1, "Q": 2, "K": 3, "A": 4}
+            values = {"J":1,"Q":2,"K":3,"A":4}
             return values[card]
 
-        a, b = hands  # hands are called a and b
+        a,b = hands #hands are called a and b
         if not firstCardOnLeft:
             a.reverse()
             b.reverse()
-        stack = ""  # cards in the middle
+        stack = "" #cards in the middle
         turns = 0
         tricks = 0
         starts = 0
-        player = 1  # alternates between 1 and -1
-        while a != "" and b != "":  # game terminates when a or b's hands are empty
+        player = 1 #alternates between 1 and -1
+        while a!="" and b!="": #game terminates when a or b's hands are empty
             battle_in_progress = False
             cards_to_play = 1
-            while cards_to_play > 0:  # current player may play up to cards_to_play cards
-                # print current status
+            while cards_to_play>0: #current player may play up to cards_to_play cards
+                #print current status
                 if verbose:
-                    print(("%s/%s/%s\r" % (a, b, stack)))
-                turns = turns+1
-
+                    print("%s/%s/%s\r" % (a,b,stack))
+                turns=turns+1
+                
                 try:
-                    if player == 1:
-                        # grab next card from first character of string a
-                        next_card = a[0]
+                    if player==1:
+                        #grab next card from first character of string a
+                        next_card = a[0] 
                         a = a[1:]
                     else:
-                        # grab next card from first character of string b
+                        #grab next card from first character of string b
                         next_card = b[0]
                         b = b[1:]
                 except IndexError:
-                    break  # ran out of cards to play, game over...
-
-                stack = stack+next_card  # add to the stack
-
-                if next_card == '-':
-                    # not a court card
+                    break #ran out of cards to play, game over...
+                
+                stack = stack+next_card #add to the stack
+                
+                if next_card=='-':
+                    #not a court card
                     if battle_in_progress:
-                        # this player needs keep trying to find a court card
-                        cards_to_play = cards_to_play-1
+                        cards_to_play=cards_to_play-1 #this player needs keep trying to find a court card
                     else:
-                        player = player*-1  # no court cards found yet, back to other player
+                        player = player*-1 #no court cards found yet, back to other player
                 else:
-                    # court card found, back to the other player
-                    battle_in_progress = True
+                    #court card found, back to the other player
+                    battle_in_progress = True 
                     cards_to_play = penalty_value_of(next_card)
                     player = player*-1
-
-            # end of trick, make the losing player pick up the cards in the stack
+                    
+            #end of trick, make the losing player pick up the cards in the stack
             tricks = tricks+1
-            if player == 1:
-                b = b+stack
+            if player==1:
+                b = b+stack 
                 stack = ''
             else:
-                a = a+stack
+                a = a+stack 
                 stack = ''
-
+        
             if len(a) == len(b):
-                starts += 1
+                starts += 1	
 
             player = player*-1
+            
 
         return (turns, tricks, starts)
 
 
-class BeggarGame(object):
 
-    def __init__(self, courtcount=4, court='AKQJ', cards=52):
+class BeggarGame(object):
+    
+    def __init__(self, courtcount = 4, court='AKQJ', cards=52):
         self.__court = list(court)
         self.__courtcount = courtcount
         self.__fullcourt = self.__court * self.__courtcount
@@ -104,6 +104,7 @@ class BeggarGame(object):
     @property
     def hands(self):
         return (self.deck[:(self.__cards/2)], self.deck[(self.__cards/2):])
+    
 
     @property
     def perm_id(self):
@@ -152,26 +153,28 @@ class BeggarGame(object):
     def bitcount(n):
         return format(n, 'b').count('1')
 
-    def validate_hands(self, l, r):
+    def validate_hands(self, l,r):
         if (len(l) != len(r) != self.__cards/2):
-            print(("Wrong hand sizes {} {}".format(len(l), len(r))))
+            print ("Wrong hand sizes {} {}".format(len(l),len(r)))
             raise ValueError
 
         for court in self.__court:
             if (l+r).count(court) != self.__courtcount:
-                print(("Wrong number of {}: {}".format(court, (l+r).count(court))))
+                print ("Wrong number of {}: {}".format(court,(l+r).count(court)))
                 raise ValueError
-
+        
+        
 
 class GameNo(object):
-    def __init__(self, start=-1, maxgame=4503530907893760):
+    def __init__(self, start = -1, maxgame = 4503530907893760):
         self.start = start
         self.maxgame = maxgame
+
 
     def __iter__(self):
         return self
 
-    def __next__(self):
+    def next(self):
         x = 0
         while self.start < self.maxgame:
             x = bin(self.start).count('1')
@@ -180,26 +183,24 @@ class GameNo(object):
                 return int(self.start-1)
             else:
                 self.start += 1
-        raise StopIteration()
-
+        raise StopIteration()    
 
 class Deal(object):
 
     def __init__(self, gameno):
-        from .combos import Combos
+        from combos import Combos
         from sympy.utilities.iterables import multiset_permutations
-        self._gameno = gameno
+        self._gameno = gameno 	
         # self._perm = Combos()()
-        self._perm = multiset_permutations(
-            ['J', 'J', 'J', 'J', 'Q', 'Q', 'Q', 'Q', 'K', 'K', 'K', 'K', 'A', 'A', 'A', 'A'])
-
-    def __iter__(self):
+        self._perm = multiset_permutations(['J','J','J','J','Q','Q','Q','Q','K','K','K','K','A','A','A', 'A'])
+        
+    def __iter__(self):	
         return self
 
-    def __next__(self):
+    def next(self):
         while(True):
             try:
-                court = next(self._perm)
+                court = self._perm.next()   
             except StopIteration:
                 raise
             deck = ""
@@ -209,9 +210,9 @@ class Deal(object):
                 else:
                     deck += court.pop()
             try:
-                BeggarGame().validate_hands(deck[:26], deck[26:])
+                BeggarGame().validate_hands(deck[:26],deck[26:])
             except Exception as ex:
-                print(ex)
                 sys.exit(1)
-            return (deck[:26], deck[26:])
-        raise StopIteration()
+            return (deck[:26],deck[26:])
+        raise StopIteration() 
+
