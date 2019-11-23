@@ -13,6 +13,15 @@ Return permuter of court cards.
 
 BeggarGame object
 purpose is to describe Beggar game based on Court and decksize provided
+requires court definition
+Can return dealer
+Can return gamenum iterator
+Can return stats about game total games
+
+
+GameNum object
+purpose to serialise game definition into iterable game numbers
+Determine min and max games from deck size and court list
 
 Calculate min/max game number to describe games
 validate input

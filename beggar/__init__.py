@@ -82,13 +82,14 @@ class Court(object):
         import string
         # check label is single character
         if label not in list(string.ascii_uppercase):
-            raise ValueError("Label for court card must be single character between A-Z")
+            raise ValueError(
+                "Label for court card must be single character between A-Z")
 
         # check value is int
-        if not isinstance(value,int):
+        if not isinstance(value, int):
             raise TypeError("value must be an int")
 
-        if (value<0) or (value>9):
+        if (value < 0) or (value > 9):
             raise ValueError("value must be positive between 1 and 9")
 
         self.__courtmap.update({label: {'value': value, 'count': count}})
@@ -113,60 +114,76 @@ class Court(object):
         return list(itertools.chain.from_iterable(c))
 
     def permute(self):
-         from sympy.utilities.iterables import multiset_permutations
-         return multiset_permutations(self.courtcards())
-    
+        from sympy.utilities.iterables import multiset_permutations
+        return multiset_permutations(self.courtcards())
+
+    @property
+    def courtcount(self):
+        return len(self.courtcards())
+
+    @property
     def permutations(self):
-        import math
+        from math import factorial
         from functools import reduce
-        #return sum(1 for x in self.permute())
+        # return sum(1 for x in self.permute())
         # X total elements. N different elements with count N1 N2 N3 etc
         # permutations =  X!/(N1! * N2! * N3! ...)
-        return (math.factorial(len(self.courtcards())))/(reduce(lambda x, y: x*y, [ math.factorial(self.__courtmap[x]['count']) for x in self.__courtmap.keys()]))
+        # NOTE requires // operation to avoid float
+        return (factorial(self.courtcount))//(reduce(lambda x, y: x*y, [factorial(self.__courtmap[x]['count']) for x in self.__courtmap.keys()]))
 
 
 class BeggarGame(object):
 
-    def __init__(self, court=None, cards=52):
+    def __init__(self, court=None, decksize=52):
         self.__court = court or Court().default()
         self.__fullcourt = self.__court.courtcards()
 
         if not isinstance(self.__court, Court):
             raise TypeError("Pass a Court object")
-        
-        if cards % 2:
+
+        if decksize % 2:
             raise ValueError("Deck must be even")
 
-        if cards<len(self.__court.courtcards()):
-            raise ValueError("Deck size must be at least equal to number of court cards")
-        
-        self.__cards = cards
+        if decksize < len(self.__court.courtcards()):
+            raise ValueError(
+                "Deck size must be at least equal to number of court cards")
 
-        self.__perm_id = None
-        self.__courtorder = None
+        self.__decksize = decksize
 
     def Create(self):
         return BeggarGame()
 
     class GameNo(object):
-        def __init__(self, mingame, maxgame, courtcount):
-            self.__mingame = mingame
-            self.__maxgame = maxgame
+        def __init__(self, courtcount, decksize):
             self.__courtcount = courtcount
+            self.__decksize = decksize
+
+            if courtcount > decksize:
+                raise ValueError("Deck must be >= court count")
+            
+            self.__mingame = int('1' * self.__courtcount, 2)
+            self.__maxgame = int(('1' * self.__courtcount) + ('0' * (self.__decksize - self.__courtcount)), 2)
+            self.__currentgame = self.__mingame
 
         def __iter__(self):
             return self
 
         def __next__(self):
             x = 0
-            while self.__mingame < self.__maxgame:
-                x = bin(self.__mingame).count('1')
+            while self.__currentgame <= self.__maxgame:
+                x = bin(self.__currentgame).count('1')
                 if x == self.__courtcount:
-                    self.__mingame += 1
-                    return int(self.__mingame-1)
+                    self.__currentgame += 1
+                    return int(self.__currentgame-1)
                 else:
-                    self.__mingame += 1
+                    self.__currentgame += 1
             raise StopIteration()
+
+    @property
+    def totalgames(self):
+        from math import factorial
+        # NOTE requires // division operator to avoid float conversion
+        return (factorial(self.__decksize)//factorial(self.__court.courtcount)) * self.__court.permutations
 
     @property
     def deck(self):
