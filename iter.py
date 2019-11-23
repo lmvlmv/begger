@@ -27,7 +27,7 @@ def report(res):
         print("Game {}, max {}".format(r[0], r[1]))
 
 
-start = 4433230883192895
+start = 4433230883192896
 trials = 1000
 d = GameNo(start=start)
 games = [next(d) for i in range(trials)]
