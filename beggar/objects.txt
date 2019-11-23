@@ -1,0 +1,51 @@
+
+General Beggar game player
+
+deck size is num cards including court
+Even
+>= court number
+
+Court object
+purpose is to describe court cards as defined.
+Return list of court cards.
+Return permutaitons of court cards
+Return permuter of court cards.
+
+BeggarGame object
+purpose is to describe Beggar game based on Court and decksize provided
+
+Calculate min/max game number to describe games
+validate input
+
+Provide dealer object for given game number and rules
+
+Dealer object
+provides iterator that deals beggar hands based on passed deck size and court
+returns symbolic representation of game (----AJQ---K etc. etc.)
+
+Player object
+plays given beggar game in symbolic form.
+Passed court object for court name -> value mapping
+Passed dealt hands from Dealer
+plays game according to rules
+detects looped game (state == start state)
+records total turns, total tricks, total visits to possible start positions
+Scalable -> celery distributable.
+
+ Court name, score, count
+
+deck court positions = court total in bits
+
+number of games = multiset permutation court count in decksize * multiset permutation court
+highest game = all 1eft bits set to 1
+
+
+
+Game player
+
+deal hand -> deck or hands + court mapping object
+hands in game represented as   0000000123400
+
+Renderer takes hands and inserts labels instead of value from mapping.
+
+

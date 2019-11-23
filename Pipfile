@@ -6,3 +6,4 @@ celery = "*"
 [dev-packages]
 pylint = "*"
 autopep8 = "*"
+rope = "*"
