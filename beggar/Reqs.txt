@@ -1,0 +1,20 @@
+
+Must play BYN games
+Must search BYN game namespace
+Must detect looping games
+Must record longest games
+Must be Scalable
+Must be deployable on container infrastructure
+Must describe deployment as code
+Must self-test
+
+Should accept varying deck types
+Should record statistical information on games
+Should use backend database for namespace search
+Should use backend database for statistics
+Should validate results are genuine
+Should provide feedback on completeness of namespace search
+
+Could have web front end
+Could have slot-machine payment system
+

@@ -208,10 +208,10 @@ class Deal(object):
                     deck += "-"
                 else:
                     deck += court.pop()
-            try:
-                BeggarGame().validate_hands(deck[:26], deck[26:])
-            except Exception as ex:
-                print(ex)
-                sys.exit(1)
+            # try:
+            #     BeggarGame().validate_hands(deck[:26], deck[26:])
+            # except Exception as ex:
+            #     print(ex)
+            #     sys.exit(1)
             return (deck[:26], deck[26:])
         raise StopIteration()

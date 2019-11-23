@@ -1,6 +1,7 @@
 [packages]
 tqdm = "*"
 sympy = "*"
+celery = "*"
 
 [dev-packages]
 pylint = "*"
