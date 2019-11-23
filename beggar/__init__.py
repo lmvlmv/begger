@@ -75,6 +75,10 @@ class Court(object):
     def __init__(self):
         self.__courtmap = {}
 
+    @property
+    def courtmap(self):
+        return self.__courtmap
+        
     def add(self, label, value, count):
 
         import string
@@ -161,16 +165,14 @@ class Deck(object):
     
 class Player(object):
 
-    def __init__(self, court, hands):
-        if not isinstance(court, Court):
-            raise TypeError("Pass a Court object")
-        self.__court = court
+    def __init__(self, courtmap, hands):
+        self.__courtmap = courtmap
         self.__hands = hands
 
     def play(self, firstCardOnLeft=True, verbose=False):
 
         def penalty_value_of(card):
-            return self.__court.cardvalue(card)
+            return self.__courtmap[card]['value']
 
         a, b = self.__hands  # hands are called a and b
         if not firstCardOnLeft:
