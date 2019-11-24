@@ -78,7 +78,7 @@ class Court(object):
     @property
     def courtmap(self):
         return self.__courtmap
-        
+
     def add(self, label, value, count):
 
         import string
@@ -330,8 +330,8 @@ class BeggarGame(object):
         # NOTE requires // division operator to avoid float conversion
         return (factorial(self.__decksize)//factorial(self.__deck.court.courtcount)) * self.__deck.court.permutations
 
-    def deal(self):
-        return next(self.__dealer)
+    def dealer(self):
+        return self.__dealer
 
     # @property
     # def deck(self):

@@ -29,7 +29,7 @@ pbar = tqdm(total=deck.court.permutations, unit='Games', ncols=140,
         bar_format='{l_bar}{bar}| {n_fmt}/{total_fmt} [{elapsed}<{remaining}] {rate_fmt} {postfix[0]} {postfix[1][maxturns]}', postfix=["Max Turns:", dict(maxturns=0)])
 try:
     while True:        
-        (turns, tricks, starts) = Player(deck.court.courtmap, bg.deal()).play()
+        (turns, tricks, starts) = Player(deck.court.courtmap, next(bg.dealer())).play()
         if turns > longest:
             longest = turns
             pbar.postfix[1]['maxturns'] = longest

@@ -2,6 +2,7 @@
 tqdm = "*"
 sympy = "*"
 celery = "*"
+iteration-utilities = "*"
 
 [dev-packages]
 pylint = "*"
