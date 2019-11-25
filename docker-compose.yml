@@ -1,0 +1,27 @@
+version: '3'
+services: 
+  rabbitmq:
+    image: "rabbitmq:latest"
+    ports: 
+      - "5672:5672"
+
+  flower:
+    build:
+      context: ./flowercont
+    ports: 
+      - "5555:5555"
+    environment:
+      BROKERURL: pyamqp://guest@rabbitmq:5672//
+      LISTEN_PORT: 5555
+    depends_on:
+      - rabbitmq
+  worker:
+    build:
+      context: ./workercont
+    environment:
+      FORKED_BY_MULTIPROCESSING: 1
+      BROKERURL: pyamqp://guest@rabbitmq:5672//
+    depends_on:
+      - rabbitmq
+
+    
