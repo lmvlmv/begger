@@ -5,6 +5,7 @@ import os
 
 # 'pyamqp://guest@localhost//'
 app = Celery('beggarplay', backend='rpc://', broker=os.environ['BROKERURL'])
+app.conf.broker_heartbeat=0
 
 @app.task
 def play(court, hands):
