@@ -112,7 +112,7 @@ class Court(object):
         import itertools
         c = []
         for x in self.__courtmap.keys():
-            c.append(list(x * self.__courtmap[x]['count']))
+            c.append(list(str(self.__courtmap[x]['value']) * self.__courtmap[x]['count']))
         return list(itertools.chain.from_iterable(c))
 
     def permute(self):
@@ -171,9 +171,6 @@ class Player(object):
 
     def play(self, firstCardOnLeft=True, verbose=False):
 
-        def penalty_value_of(card):
-            return self.__courtmap[card]['value']
-
         a, b = self.__hands  # hands are called a and b
         if not firstCardOnLeft:
             a.reverse()
@@ -216,7 +213,7 @@ class Player(object):
                 else:
                     # court card found, back to the other player
                     battle_in_progress = True
-                    cards_to_play = penalty_value_of(next_card)
+                    cards_to_play = next_card
                     player = player*-1
 
             # end of trick, make the losing player pick up the cards in the stack
