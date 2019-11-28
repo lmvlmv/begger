@@ -213,7 +213,7 @@ class Player(object):
                 else:
                     # court card found, back to the other player
                     battle_in_progress = True
-                    cards_to_play = next_card
+                    cards_to_play = int(next_card)
                     player = player*-1
 
             # end of trick, make the losing player pick up the cards in the stack
