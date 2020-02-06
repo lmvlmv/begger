@@ -112,7 +112,8 @@ class Court(object):
         import itertools
         c = []
         for x in self.__courtmap.keys():
-            c.append(list(str(self.__courtmap[x]['value']) * self.__courtmap[x]['count']))
+            c.append(
+                list(str(self.__courtmap[x]['value']) * self.__courtmap[x]['count']))
         return list(itertools.chain.from_iterable(c))
 
     def permute(self):
@@ -136,33 +137,41 @@ class Court(object):
     def cardvalue(self, card):
         return self.__courtmap[card]['value']
 
+
 class Deck(object):
     def __init__(self, court, decksize):
 
-        if not isinstance(court, Court):
-            raise TypeError("Pass a Court object")
+        self.court = court
+        self.decksize = decksize
 
-        if decksize % 2:
-            raise ValueError("Deck must be even")
-
-        if decksize < len(court.courtcards()):
-            raise ValueError(
-                "Deck size must be at least equal to number of court cards")
-
-        self.__court = court
-        self.__decksize = decksize
-    
     def __len__(self):
-        return self.__decksize
+        return self.decksize
 
     @property
     def court(self):
-        return self.__court
-    
+        return self._court
+
+    @court.setter
+    def court(self, v):
+        if not isinstance(v, Court):
+            raise TypeError("Pass a Court object")
+        self._court = v
+
     @property
     def decksize(self):
-        return self.__decksize
-    
+        return self._decksize
+
+    @decksize.setter
+    def decksize(self, v):
+        if v % 2:
+            raise ValueError("Deck must be even")
+
+        if v < len(self.court.courtcards()):
+            raise ValueError(
+                "Deck size must be at least equal to number of court cards")
+        self._decksize = v
+
+
 class Player(object):
 
     def __init__(self, courtmap, hands):
@@ -232,6 +241,7 @@ class Player(object):
 
         return (turns, tricks, starts)
 
+
 class BeggarGame(object):
 
     def __init__(self, deck, gamenum=None):
@@ -241,12 +251,13 @@ class BeggarGame(object):
 
         self.__deck = deck
         self.__decksize = len(deck)
-        self.__gameno = self.GameNo(self.__deck.court.courtcount, self.__decksize, start=gamenum, findfirst=True)
-        self.__dealer = self.Dealer(self.__deck, next(self.__gameno)) 
+        self.__gameno = self.GameNo(
+            self.__deck.court.courtcount, self.__decksize, start=gamenum, findfirst=True)
+        self.__dealer = self.Dealer(self.__deck, next(self.__gameno))
 
     def Create(self, deck):
         return BeggarGame(deck)
- 
+
     class GameNo(object):
         def __init__(self, courtcount, decksize, start=None, findfirst=False):
             self.__courtcount = courtcount
@@ -262,7 +273,8 @@ class BeggarGame(object):
                         while format(start, 'b').count('1') != courtcount:
                             start += 1
                     else:
-                        raise ValueError("Starting game number not valid for this deck")
+                        raise ValueError(
+                            "Starting game number not valid for this deck")
                 # if (len('{:0b}'.format(start)) != decksize):
                 #     raise ValueError("Starting game number wrong length for this decksize {}:{}".format(len(format(start, 'b')), decksize))
 
@@ -300,7 +312,7 @@ class BeggarGame(object):
 
             if format(gamenum, 'b').count('1') != len(deck.court.courtcards()):
                 raise ValueError("Game number not valid for this deck")
-            
+
             self.__gamenum = gamenum
 
         def __iter__(self):
